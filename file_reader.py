@@ -1,27 +1,26 @@
 import csv
 
-with open('country_full.csv', 'r') as f:
-    regions = []
-    out = []
-    data = []
+groups = {}
 
+with open('country_full.csv', 'r') as f:
     rows = csv.DictReader(f)
 
     for row in rows:
-        regions.append(row['region'])
-        a = out.append(row['name'])
-        b = out.append(row['region'])
-        data.append[1,2]
-
-    for region in set(regions):
+        region = row['region']
         if region == "":
             region = "Antarctica"
 
-        print(f"creating a file for: {region}...")
+        if region not in groups:
+            groups[region] = []
 
-        with open(f"regions/{region}.csv", 'w') as region:
-            print(f"writing {out} to {region.name}...")
-            writer = csv.writer(region)
-            writer.writerows(out)
-    
+        groups[region].append([row['name'], region])
 
+for region, region_rows in groups.items():
+    print(f"creating a file for: {region}...")
+
+    with open(f"regions/{region}.csv", 'w') as out_file:
+        writer = csv.writer(out_file)
+        writer.writerow(['name','region'])
+        writer.writerows(region_rows)
+
+    print(f"wrote {len(region_rows)} rows to regions/{region}.csv")
